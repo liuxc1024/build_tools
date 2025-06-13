@@ -542,9 +542,14 @@ def get_ssh_base_url():
 def git_update(repo, is_no_errors=False, is_current_dir=False, git_owner=""):
   print("[git] update: " + repo)
   owner = git_owner if git_owner else "ONLYOFFICE"
+  # 特殊处理：web-apps 仓库使用 liuxc1024 的 fork
+  if repo == "web-apps" and not git_owner:
+    owner = "liuxc1024"
   url = "https://github.com/" + owner + "/" + repo + ".git"
   if git_is_ssh():
     url = get_ssh_base_url() + repo + ".git"
+  if git_is_ssh() and repo == "web-apps" and not git_owner:
+    url = "git@github.com:liuxc1024/" + repo + ".git"
   folder = get_script_dir() + "/../../" + repo
   if is_current_dir:
     folder = repo
